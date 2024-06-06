@@ -61,7 +61,7 @@ impl PackedInt {
     }
 
     pub fn to_12_bits(&self) -> [u8; 2] {
-        [self.inner as u8, (self.inner >> 2) as u8]
+        [self.inner as u8, (self.inner >> 4) as u8]
     }
 
     pub fn from_16_bits(bits: &[u8; 2]) -> Self {
