@@ -99,3 +99,27 @@ impl_traits!(usize, from_usize, to_usize);
 impl_traits!(u128, from_u128, to_u128);
 impl_traits!(u64, from_u64, to_u64);
 impl_traits!(u32, from_u32, to_u32);
+
+#[cfg(test)]
+mod tests {
+    use crate::*;
+
+    #[test]
+    pub fn test_int_packing() {
+        let check = |value| {
+            let packed = PackedInt::from_u64(value);
+            let unpacked = packed.to_u64();
+            assert_eq!(value, unpacked);
+        };
+
+        for value in 0..512 {
+            for shift in 0..64 {
+                check(value << shift)
+            }
+        }
+
+        for inner in 0..0x3900 {
+            check((PackedInt { inner }).to_u64())
+        }
+    }
+}
