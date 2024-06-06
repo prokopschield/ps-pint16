@@ -1,0 +1,14 @@
+[package]
+name = "ps-pint16"
+version = "0.1.0-1"
+description = "Packs integers into a u16 via variable precision"
+license = "GPL-3.0-or-later"
+edition = "2021"
+
+[profile.dev]
+opt-level = 3
+
+[profile.release]
+opt-level = 3
+
+[dependencies]
