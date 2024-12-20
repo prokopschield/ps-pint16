@@ -45,9 +45,9 @@ macro_rules! impl_traits {
             }
         }
 
-        impl Into<$type> for PackedInt {
-            fn into(self) -> $type {
-                self.$into()
+        impl From<PackedInt> for $type {
+            fn from(packed: PackedInt) -> $type {
+                packed.$into()
             }
         }
     };
