@@ -105,6 +105,15 @@ mod tests {
     use crate::*;
 
     #[test]
+    pub fn order() {
+        for i in 0..0x1000 {
+            assert!(
+                PackedInt::from_inner_u16(i + 1).to_u128() > PackedInt::from_inner_u16(i).to_u128()
+            );
+        }
+    }
+
+    #[test]
     pub fn test_int_packing() {
         let check = |value| {
             let packed = PackedInt::from_u64(value);
