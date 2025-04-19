@@ -1,6 +1,6 @@
 [package]
 name = "ps-pint16"
-version = "0.1.0-3"
+version = "0.1.0-4"
 description = "Packs integers into a u16 via variable precision"
 license = "GPL-3.0-or-later"
 edition = "2021"
