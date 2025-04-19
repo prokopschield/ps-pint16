@@ -30,6 +30,8 @@ macro_rules! impl_into_type {
 
             if prefix == 0 {
                 suffix
+            } else if 7 + prefix >= <$type>::BITS as $type {
+                <$type>::MAX
             } else {
                 (1 << (7 + prefix)) | (suffix << (prefix - 1))
             }
@@ -103,6 +105,100 @@ impl_traits!(u32, from_u32, to_u32);
 #[cfg(test)]
 mod tests {
     use crate::*;
+
+    #[test]
+    fn no_panic() {
+        for index in 0..16 {
+            let original = 1 << index;
+            let unpacked = PackedInt::from_u16(original).to_u16();
+
+            assert_eq!(
+                unpacked, original,
+                "unpacked u16 {original} unpacked to {unpacked}"
+            );
+        }
+
+        for index in 0..32 {
+            let original = 1 << index;
+            let unpacked = PackedInt::from_u32(original).to_u32();
+
+            assert_eq!(
+                unpacked, original,
+                "unpacked u32 {original} unpacked to {unpacked}"
+            );
+        }
+
+        for index in 0..64 {
+            let original = 1 << index;
+            let unpacked = PackedInt::from_u64(original).to_u64();
+
+            assert_eq!(
+                unpacked, original,
+                "unpacked u64 {original} unpacked to {unpacked}"
+            );
+        }
+
+        for index in 0..128 {
+            let original = 1 << index;
+            let unpacked = PackedInt::from_u128(original).to_u128();
+
+            assert_eq!(
+                unpacked, original,
+                "unpacked u128 {original} unpacked to {unpacked}"
+            );
+        }
+
+        for index in 0..64 {
+            let original = 1 << index;
+            let unpacked = PackedInt::from_usize(original).to_usize();
+
+            assert_eq!(
+                unpacked, original,
+                "unpacked usize {original} unpacked to {unpacked}"
+            );
+        }
+
+        for index in 0..128 {
+            let original = 1 << index;
+            let packed = PackedInt::from_u128(original);
+
+            let u16 = packed.to_u16();
+            let u32 = packed.to_u32();
+            let u64 = packed.to_u64();
+            let u128 = packed.to_u128();
+            let usize = packed.to_usize();
+
+            if u16::MAX as u128 > original {
+                assert_eq!(u16 as u128, original)
+            } else {
+                assert_eq!(u16, u16::MAX)
+            };
+
+            if u32::MAX as u128 > original {
+                assert_eq!(u32 as u128, original)
+            } else {
+                assert_eq!(u32, u32::MAX)
+            };
+
+            if u64::MAX as u128 > original {
+                assert_eq!(u64 as u128, original)
+            } else {
+                assert_eq!(u64, u64::MAX)
+            };
+
+            if u128::MAX as u128 > original {
+                assert_eq!(u128 as u128, original)
+            } else {
+                assert_eq!(u128, u128::MAX)
+            };
+
+            if usize::MAX as u128 > original {
+                assert_eq!(usize as u128, original)
+            } else {
+                assert_eq!(usize, usize::MAX)
+            };
+        }
+    }
 
     #[test]
     pub fn order() {
